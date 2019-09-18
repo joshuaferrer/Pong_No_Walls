@@ -199,9 +199,11 @@ while p1_wins < 2 or p2_wins < 2:
                     direction = DOWNLEFT
                 if direction == UPRIGHT:
                     direction = UPLEFT
+                    '''
         else:
             # Ball has moved out of window without colliding with a paddle
-            if (ball.top < 0 or ball.bottom > window_height) and (ball.left > (window_width / 2) or ball.right < window_width):
+            if (ball.top < 0 or ball.bottom > window_height) and \
+                    (ball.left > (window_width / 2) or ball.right < window_width):
                 out_of_bounds.play()
                 if player2_score < 10:
                     player2_score += 1
@@ -209,9 +211,20 @@ while p1_wins < 2 or p2_wins < 2:
                 else:
                     player2_score = 0
                     p2_wins += 1
+                    
+            if (ball.top < 0 or ball.bottom > window_height) and \
+                    (ball.left < 0 or ball.right < window_width / 2):
+                out_of_bounds.play()
+                if player1_score < 10:
+                    player1_score += 1
+                    direction = reset_ball()
+                else:
+                    player1_score = 0
+                    p1_wins += 1
 
+        '''
         # Check if collision with player2 paddles
-        if player2_top.colliderect(ball):
+        elif player2_top.colliderect(ball):
             bounce_sound.play()
             if ball.top < player2_top.bottom:
                 # box has moved past the top
@@ -219,7 +232,7 @@ while p1_wins < 2 or p2_wins < 2:
                     direction = DOWNLEFT
                 if direction == UPRIGHT:
                     direction = DOWNRIGHT
-        if player2_bottom.colliderect(ball):
+        elif player2_bottom.colliderect(ball):
             bounce_sound.play()
             if ball.bottom > player2_bottom.top:
                 # box has moved past the bottom
@@ -227,7 +240,7 @@ while p1_wins < 2 or p2_wins < 2:
                     direction = UPLEFT
                 if direction == DOWNRIGHT:
                     direction = UPRIGHT
-        if player2_side.colliderect(ball):
+        elif player2_side.colliderect(ball):
             bounce_sound.play()
             if ball.left < player2_side.right:
                 # box has moved past the left side
@@ -237,7 +250,8 @@ while p1_wins < 2 or p2_wins < 2:
                     direction = UPRIGHT
         else:
             # Ball has moved out of window without colliding with a paddle
-            if (ball.top < 0 or ball.bottom > window_height) and (ball.left < 0 or ball.right > window_width / 2):
+            '''
+            if (ball.top < 0 or ball.bottom > window_height) and (ball.left < 0 or ball.right < window_width / 2):
                 out_of_bounds.play()
                 if player1_score < 10:
                     player1_score += 1
@@ -245,6 +259,27 @@ while p1_wins < 2 or p2_wins < 2:
                 else:
                     player1_score = 0
                     p1_wins += 1
+                    '''
+        # Ball has moved out of window without colliding with a paddle
+        if (ball.top < 0 or ball.bottom > window_height or ball.right > window_width) and \
+                (ball.left > 400 or ball.right < window_width):
+            out_of_bounds.play()
+            if player2_score < 10:
+                player2_score += 1
+                direction = reset_ball()
+            else:
+                player2_score = 0
+                p2_wins += 1
+
+        if (ball.top < 0 or ball.bottom > window_height or ball.left < 0) and \
+                (ball.left < 0 or ball.right < window_width / 2):
+            out_of_bounds.play()
+            if player1_score < 10:
+                player1_score += 1
+                direction = reset_ball()
+            else:
+                player1_score = 0
+                p1_wins += 1
 
     # Draw the net
     pygame.draw.line(window_surface, WHITE, (400, 0), (400, 400), 5)
